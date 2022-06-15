@@ -1,6 +1,6 @@
 ﻿namespace Serpent
 {
-    partial class SerpentGame
+    partial class Game
     {
         /// <summary>
         ///  Required designer variable.

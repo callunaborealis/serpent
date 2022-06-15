@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Serpent
 {
-    public partial class SerpentGame : Form
+    public partial class Game : Form
     {
 
         private List<Circle> Serpent = new();
@@ -25,7 +25,7 @@ namespace Serpent
         Random rand = new();
 
         bool goLeft, goRight, goUp, goDown;
-        public SerpentGame()
+        public Game()
         {
             InitializeComponent();
             new Settings(); 
@@ -144,6 +144,11 @@ namespace Serpent
                     {
                         Serpent[i].Y = 0;
                     }
+
+                    if (Serpent[i].X == ball.X && Serpent[i].Y == ball.Y)
+                    {
+                        SwallowBall();
+                    }
                 } 
                 else
                 {
@@ -218,14 +223,31 @@ namespace Serpent
                 Serpent.Add(body);
             }
 
-            ball = new() { X = rand.Next(2, maxWidth), Y = rand.Next(2, maxHeight) };
+            PlaceNextBall();
+            
 
             gameTimer.Start();
         }
 
+        private void PlaceNextBall()
+        {
+            ball = new() { X = rand.Next(2, maxWidth), Y = rand.Next(2, maxHeight) };
+        }
+
         private void SwallowBall()
         {
+            score += 1;
+            scoreLabel.Text = "Score: " + score;
 
+            Circle body = new()
+            {
+                X = Serpent[Serpent.Count - 1].X,
+                Y = Serpent[Serpent.Count - 1].Y
+            };
+
+            Serpent.Add(body);
+
+            PlaceNextBall();
         }
     }
 }
