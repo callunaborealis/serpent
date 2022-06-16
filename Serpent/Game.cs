@@ -84,8 +84,8 @@ namespace Serpent
         {
             Label caption = new();
             caption.Text = "I scored: " + score + " and my high score is " + highScore;
-            caption.Font = new Font("Lato", 12, FontStyle.Bold);
-            caption.ForeColor = Color.LightBlue;
+            caption.Font = new Font("Lato", 16, FontStyle.Bold);
+            caption.ForeColor = Color.White;
             caption.AutoSize = false;
             caption.Width = gameCanvas.Width;
             caption.Height = 30;
@@ -98,15 +98,16 @@ namespace Serpent
             dialog.Filter = "JPG Image File | *.jpg";
             dialog.ValidateNames = true;
 
-            if (dialog.ShowDialog() == DialogResult.OK)
+            DialogResult dialogResult = dialog.ShowDialog();
+            if (dialogResult == DialogResult.OK)
             {
                 int width = Convert.ToInt32(gameCanvas.Width);
                 int height = Convert.ToInt32(gameCanvas.Height);
                 Bitmap bmp = new(width, height);
                 gameCanvas.DrawToBitmap(bmp, new Rectangle(0, 0, width, height));
                 bmp.Save(dialog.FileName, ImageFormat.Jpeg);
-                gameCanvas.Controls.Remove(caption);
             }
+            gameCanvas.Controls.Remove(caption);
 
         }
 
