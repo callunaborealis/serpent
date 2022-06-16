@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using System.Drawing.Imaging; // For JPEG Compression
+
 namespace Serpent
 {
     public partial class Game : Form
@@ -80,6 +82,31 @@ namespace Serpent
 
         private void OnScreenshotBtnClick(object sender, EventArgs e)
         {
+            Label caption = new();
+            caption.Text = "I scored: " + score + " and my high score is " + highScore;
+            caption.Font = new Font("Lato", 12, FontStyle.Bold);
+            caption.ForeColor = Color.LightBlue;
+            caption.AutoSize = false;
+            caption.Width = gameCanvas.Width;
+            caption.Height = 30;
+            caption.TextAlign = ContentAlignment.MiddleCenter;
+            gameCanvas.Controls.Add(caption);
+
+            SaveFileDialog dialog = new();
+            dialog.FileName = "Serpent-Snapshot";
+            dialog.DefaultExt = "jpg";
+            dialog.Filter = "JPG Image File | *.jpg";
+            dialog.ValidateNames = true;
+
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                int width = Convert.ToInt32(gameCanvas.Width);
+                int height = Convert.ToInt32(gameCanvas.Height);
+                Bitmap bmp = new(width, height);
+                gameCanvas.DrawToBitmap(bmp, new Rectangle(0, 0, width, height));
+                bmp.Save(dialog.FileName, ImageFormat.Jpeg);
+                gameCanvas.Controls.Remove(caption);
+            }
 
         }
 
@@ -149,6 +176,14 @@ namespace Serpent
                     {
                         SwallowBall();
                     }
+
+                    for (int j = 1; j < Serpent.Count; j++)
+                    {
+                        if (Serpent[i].X == Serpent[j].X && Serpent[i].Y == Serpent[j].Y)
+                        {
+                            GameOver();
+                        }
+                    }
                 } 
                 else
                 {
@@ -158,11 +193,6 @@ namespace Serpent
             }
 
             gameCanvas.Invalidate();
-        }
-
-        private void OnScreenshotBtnClick(object sender, PaintEventArgs e)
-        {
-
         }
 
         private void OnGameCanvasPaint(object sender, PaintEventArgs e)
@@ -227,6 +257,22 @@ namespace Serpent
             
 
             gameTimer.Start();
+        }
+
+        private void GameOver()
+        {
+            gameTimer.Stop();
+            startButton.Enabled = true;
+            screenshotButton.Enabled = true;
+
+
+            if (score > highScore)
+            {
+                highScore = score;
+                highscoreLabel.Text = "High Score: " + Environment.NewLine + highScore;
+                highscoreLabel.ForeColor = Color.Maroon;
+                highscoreLabel.TextAlign = ContentAlignment.MiddleCenter;
+            }
         }
 
         private void PlaceNextBall()

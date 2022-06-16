@@ -98,10 +98,9 @@
             // 
             // gameTimer
             // 
-            this.gameTimer.Interval = 40;
             this.gameTimer.Tick += new System.EventHandler(this.OnGameTimerTick);
             // 
-            // SerpentGame
+            // Game
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -111,7 +110,7 @@
             this.Controls.Add(this.gameCanvas);
             this.Controls.Add(this.screenshotButton);
             this.Controls.Add(this.startButton);
-            this.Name = "SerpentGame";
+            this.Name = "Game";
             this.Text = "Serpent";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnGameKeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.OnGameKeyUp);
